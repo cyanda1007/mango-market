@@ -27,3 +27,21 @@ To get going:
 - Fork & Clone this repo
 - Install the dependencies
 - Run the app
+
+## Other things
+
+<!-- * Deploy your app to heroku - share the link with us -->
+
+- Ensure your app is responsive.
+- Create a color scheme with some elements of green using : https://coolors.co/
+- Create a paper prototype for your screens - plan your screens. Add this to your repo in GitHub.
+- Use ExpressJS and Handlebars we started the app for you in `index.js`.
+
+Fork and clone this repo.
+Commit to GitHub regularly.
+
+## Share this with us via email
+
+- Make a demo of how your app is working using [loom](https://www.loom.com/). And email it to us.
+- The GitHub repo for your project.
+- Your paper prototype - do this first. In the first hour of working on your app. Add photos of the prototypes to your repo. Use prototypes to clarify your thinking with the mentors.
