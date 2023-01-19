@@ -1,0 +1,27 @@
+{
+  "name": "mango_market",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codex-academy/mango_market.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/codex-academy/mango_market/issues"
+  },
+  "homepage": "https://github.com/codex-academy/mango_market#readme",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "express": "^4.17.1",
+    "express-handlebars": "^6.0.1",
+    "mocha": "^10.2.0",
+    "pg-promise": "^11.0.2"
+  }
+}
