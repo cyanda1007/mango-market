@@ -71,5 +71,5 @@ app.post("/action_Shop", async function (req, res) {
 
 // start  the server and start listening for HTTP request on the PORT number specified...
 app.listen(PORT, function () {
-  console.log(`AvoApp started on port ${PORT}`);
+  console.log(`mangoApp started on port ${PORT}`);
 });
