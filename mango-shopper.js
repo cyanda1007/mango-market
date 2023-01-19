@@ -1,53 +1,63 @@
-module.exports = function (db) {
+module.exports = function (pool) {
+  async function createShop(shopName) {
+    const result = await pool.query(
+      `insert into shop (name) values ($1) returning id`,
+      [shopName]
+    );
+    if (result.rowCount === 1) {
+      return result.rows[0].id;
+    }
+    return null;
+  }
 
-	async function createShop(shopName) {
-		const result = await db.one(`insert into shop (name) values ($1) returning id`, [shopName], (data) => data.id);
-		return result;
-	}
+  async function listShops() {
+    const result = await pool.query(`select * from shop`);
+    return result.rows;
+  }
 
-	async function listShops() {
-		const result = await db.manyOrNone(`select * from shop`);
-		return result;
-	}
+  async function dealsForShop(shopId) {
+    const result = await pool.query(
+      `select * from avo_deal where shop_id = $1`,
+      [shopId]
+    );
+    return result.rows;
+  }
 
-	async function dealsForShop(shopId) {
-		const result = await db.oneOrNone(`select * from mango_deal where shop_id = $1`, [shopId]);
-		return result;
-	}
+  async function topFiveDeals() {
+    const bestPriceSQL = `select name as shop_name, price, qty, round((price/qty), 2) as unit_price from avo_deal 
+		  join shop on shop.id = avo_deal.shop_id 
+		  order by (price/qty) asc 
+		  limit 5`;
 
-	async function topFiveDeals() {
-		const bestPriceSQL = `select name as shop_name, price, qty, round((price/qty), 2) as unit_price from mango_deal 
-		join shop on shop.id = mango_deal.shop_id 
-		order by (price/qty) asc 
-		limit 5`
+    const result = await pool.query(bestPriceSQL);
+    return result.rows;
+  }
 
-		const result = await db.any(bestPriceSQL);
-		return result;
+  async function createDeal(shopId, qty, price) {
+    await pool.query(
+      `insert into avo_deal (shop_id, qty, price) values ($1, $2, $3)`,
+      [shopId, qty, price]
+    );
+  }
 
-	}
+  async function recommendDeals(amount) {
+    const result = await pool.query(
+      `
+			  select name, price, qty, round((price/qty), 2) as unit_price from avo_deal 
+			  join shop on shop.id = avo_deal.shop_id 
+			  where price <= $1 order by unit_price asc`,
+      [amount]
+    );
 
-	async function createDeal(shopId, qty, price) {
-		await db.none(`insert into mango_deal (shop_id, qty, price) values ($1, $2, $3)`,
-			[shopId, qty, price]);
-	}
+    return result.rows;
+  }
 
-	async function recommendDeals(amount) {
-		const result = await db.many(`
-			select name, price, qty, round((price/qty), 2) as unit_price from mango_deal 
-			join shop on shop.id = mango_deal.shop_id 
-			where price <= $1 order by unit_price asc`, [amount]);
-
-		return result;
-	}
-
-	return {
-		createDeal,
-		createShop,
-		listShops,
-		dealsForShop,
-		recommendDeals,
-		topFiveDeals
-	}
-
-
-}
+  return {
+    createDeal,
+    createShop,
+    listShops,
+    dealsForShop,
+    recommendDeals,
+    topFiveDeals,
+  };
+};
